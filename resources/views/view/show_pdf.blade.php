@@ -16,7 +16,7 @@
         <div>
             <div class="text-center">
                 <small> Printed By {{ Auth::user()->name }} - {{ Auth::user()->email }} -
-                    {{ $time = \Carbon\Carbon::now()->translatedFormat('d/m-Y') }}</small>
+                    {{ $time = \Carbon\Carbon::now()->translatedFormat('d/m/Y') }}</small>
             </div>
             <br>
             <br>
