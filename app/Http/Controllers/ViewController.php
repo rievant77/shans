@@ -104,6 +104,6 @@ class ViewController extends Controller
 
         $pdfs = Report::findorfail($id);
         $pdf = PDF::loadView('view.show_pdf', compact('pdfs'))->setPaper('A4', 'potrait')->setOptions(['isHtml5ParserEnabled:true']);
-        return $pdf->download('Rules-pdf-' . date('d-m-Y') . '.pdf');
+        return $pdf->download('Rules-pdf-' . date('d-m-Y_H-i-s') . '.pdf');
     }
 }
