@@ -21,17 +21,16 @@
 </head>
 
 <body>
-    <div class="container mt-3 box">
+
+    <div class="text-center">
         <!-- Image and text -->
-        <div class="m-3">
-            <a class="btn btn-outline-success btn-lg btn-block" href="{{route('exportpdf', $pdfs->id)}}"
-                target=" _blank">
-                EXPORT
-            </a>
+        <div class="rounded mx-auto d-block">
+            <small> Printed By {{ Auth::user()->name }} - {{ Auth::user()->email }} -
+                {{ $time = \Carbon\Carbon::now()->translatedFormat('d/m/Y') }}</small>
         </div>
-        <div class="row wrap">
+        <div class="row wrapper">
             <div class="col-sm-12 mt-3">
-                {!!$pdfs->description!!}
+                {!! $pdfs->description !!}
             </div>
         </div>
     </div>

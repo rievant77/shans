@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Report;
 use PDF;
+use Response;
+use Image;
 
 class ViewController extends Controller
 {
@@ -44,9 +46,30 @@ class ViewController extends Controller
             'description' => 'required'
         ]);
 
+        $description = $request->input('description');
+        $dom = new \DomDocument();
+        $dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $key => $img) {
+            $data = $img->getAttribute('src');
+
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+
+            $image_name = "/asset/img/" . time() . $key . '.png';
+            $path = public_path() . $image_name;
+            file_put_contents($path, $data);
+            $img->removeAttribute('src');
+            $img->setAttribute('src', $image_name);
+        }
+
+        $description = $dom->saveHTML();
+
         $push = Report::create([
             'title' => $request->title,
-            'description' => $request->description
+            'description' => $description
         ]);
 
         return redirect()->back()->with('success', 'Saved Success');
@@ -103,7 +126,7 @@ class ViewController extends Controller
     {
 
         $pdfs = Report::findorfail($id);
-        $pdf = PDF::loadView('view.show_pdf', compact('pdfs'))->setPaper('A4', 'potrait')->setOptions(['isHtml5ParserEnabled:true']);
-        return $pdf->download('Rules-pdf-' . date('d-m-Y_H-i-s') . '.pdf');
+        $pdf = PDF::loadView('view.show_pdf', compact('pdfs'));
+        return $pdf->stream('Rules-pdf-' . date('d-m-Y_H-i-s') . '.pdf');
     }
 }
