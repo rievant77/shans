@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="{{asset('asset/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href=" {{asset('asset/dist/css/adminlte.min.css')}} ">
-    <!-- summernote -->
-    <link rel="stylesheet" href="{{asset('asset/plugins/summernote/summernote-bs4.css')}}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 </head>

@@ -9,29 +9,45 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <style>
-        .box {
-            box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.4);
-            padding: 30px;
-            border: 1px solid grey;
+        #watermark {
+            position: fixed;
+
+            /**
+                    Set a position in the page for your image
+                    This should center it vertically
+                **/
+            bottom: 10cm;
+            left: 5.5cm;
+
+            /** Change image dimensions**/
+            width: 8cm;
+            height: 8cm;
+
+            /** Your watermark should be behind every content**/
+            z-index: -1000;
         }
     </style>
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
     <title>Rules Pdf | {{ Auth::user()->name }}</title>
 </head>
 
 <body>
 
     <div class="text-center">
-        <!-- Image and text -->
         <div class="rounded mx-auto d-block">
             <small> Printed By {{ Auth::user()->name }} - {{ Auth::user()->email }} -
                 {{ $time = \Carbon\Carbon::now()->translatedFormat('d/m/Y') }}</small>
         </div>
         <div class="row wrapper">
             <div class="col-sm-12 mt-3">
-                {!! $pdfs->description !!}
+
+                {{-- Looping Image --}}
+                @foreach (json_decode($pdfs->image) as $pic)
+                <br><img src="{{ asset('/asset/img/'. $pic) }}" style="height:1200px; width:800px" /></br>
+                @endforeach
+
             </div>
+
         </div>
     </div>
 
@@ -40,6 +56,25 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+    </script>
+    <script language="JavaScript">
+        // Disable Klik Kanan
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            { //Alt+c, Alt+v will also be disabled sadly.
+                alert('Ooops Tidak Bisa');
+            }
+        }, false);
+
+        // Disable CTRL+U
+        document.onkeydown = function (e) {
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode ===
+                117)) { //Alt+c, Alt+v will also be disabled sadly.
+                alert('Ooops Tidak Bisa');
+            }
+            return false;
+        };
+
     </script>
 </body>
 

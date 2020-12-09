@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Report;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use PDF;
 use Response;
 use Image;
@@ -41,37 +42,23 @@ class ViewController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+
+        $this->validate($request, [
             'title' => 'required',
-            'description' => 'required'
+            'image' => 'required'
         ]);
 
-        $description = $request->input('description');
-        $dom = new \DomDocument();
-        $dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $images = $dom->getElementsByTagName('img');
-
-        foreach ($images as $key => $img) {
-            $data = $img->getAttribute('src');
-
-            list($type, $data) = explode(';', $data);
-            list(, $data)      = explode(',', $data);
-            $data = base64_decode($data);
-
-            $image_name = "/asset/img/" . time() . $key . '.png';
-            $path = public_path() . $image_name;
-            file_put_contents($path, $data);
-            $img->removeAttribute('src');
-            $img->setAttribute('src', $image_name);
+        if ($request->hasfile('image')) {
+            foreach ($request->file('image') as $file) {
+                $name = "img-" . time() . "-" . $file->getClientOriginalName();
+                $file->move(public_path() . '/asset/img/', $name);
+                $imgData[] = $name;
+            }
         }
-
-        $description = $dom->saveHTML();
-
-        $push = Report::create([
-            'title' => $request->title,
-            'description' => $description
-        ]);
-
+        $fileModal = new Report();
+        $fileModal->title = $request->title;
+        $fileModal->image = json_encode($imgData);
+        $fileModal->save();
         return redirect()->back()->with('success', 'Saved Success');
     }
 
@@ -125,8 +112,21 @@ class ViewController extends Controller
     public function exportpdf($id)
     {
 
+        // $pdfs = new Dompdf();
+        // $pdfs->load_html($html);
+        // $pdfs->render();
+        // $canvas = $pdfs->getCanvas();
+        // $canvas->page_script('
+        // $pdf->set_opacity(.5);
+        // $pdf->image("asset/watermark/wm.png", 200, 300, 100, 100);
+        // ');
+        // $image = (public_path('asset/watermark/wm96.png'));
+        // $pdf = new PDF();
+        // $pdf->setWatermarkImage($image, $opacity = 0.6, $top = '30%', $width = '100%', $height = '100%');
+
         $pdfs = Report::findorfail($id);
-        $pdf = PDF::loadView('view.show_pdf', compact('pdfs'));
-        return $pdf->stream('Rules-pdf-' . date('d-m-Y_H-i-s') . '.pdf');
+        $pdf = PDF::loadview('view.show_pdf', ['pdfs' => $pdfs])->setPaper(a4, potrait);
+
+        return $pdf->download('Rules-pdf-' . date('d-m-Y_H-i-s') . '.pdf');
     }
 }

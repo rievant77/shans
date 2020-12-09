@@ -2,12 +2,12 @@
 
 @if (count($errors)>0)
 @foreach ($errors->all() as $error)
-    {{ $error }}
+{{ $error }}
 @endforeach
 @endif
 
 @if (Session::has('success'))
-    {{ Session('success') }}
+{{ Session('success') }}
 @endif
 
 @section('content')
@@ -34,7 +34,11 @@
                                 <form action="{{route('view.destroy', $pdf->id)}}" method="post">
                                     @csrf
                                     @method('delete')
-                                    <a href=" {{route('view.show', $pdf->id)}} " class="btn btn-primary">View</a>
+                                    <a href=" {{route('view.show', $pdf->id)}} " class="btn btn-primary"
+                                        target="_blank">View</a>
+                                    <a href=" {{ route('exportpdf', $pdf->id) }} " class="btn btn-secondary"
+                                        target="_blank">Export
+                                        Pdf</a>
                                     <button type="submit" class="btn btn-danger">Move to Trash</button>
                                 </form>
                             </td>

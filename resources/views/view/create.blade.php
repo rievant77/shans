@@ -3,10 +3,21 @@
 @section('content')
 
 <!-- Error Message -->
-@if (count($errors)>0)
-@foreach ($errors->all() as $error)
-{{ $error }}
-@endforeach
+@if (count($errors) > 0)
+<div class="alert alert-danger">
+    <strong>Sorry !</strong> There were some problems with your input.<br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <section class="content">
@@ -21,56 +32,70 @@
                     <!-- tools box -->
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse"
-                            data-toggle="tooltip" title="Collapse">
-                            <i class="fas fa-minus"></i></button>
-                        <button type="button" class="btn btn-tool btn-sm" data-card-widget="remove"
-                            data-toggle="tooltip" title="Remove">
-                            <i class="fas fa-times"></i></button>
+                            data-toggle="tooltip" title="Collapse"></i></button>
+                        <button type="button" class="btn btn-tool btn-sm" data-card-widget="remove" </button> </div>
+                            <!-- /. tools -->
                     </div>
-                    <!-- /. tools -->
-                </div>
-                <!-- /.card-header -->
-                <form action=" {{route('view.index')}} " method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="card-body pad">
-                        <div class="mb-3">
-                            <div class="card-body">
-                                <!-- Title -->
-                                <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input type="text" class="form-control" id="title" name="title"
-                                        placeholder="Enter title">
+                    <!-- /.card-header -->
+                    <form action=" {{route('view.index')}} " method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="card-body pad">
+                            <div class="mb-3">
+                                <div class="card-body">
+                                    <!-- Title -->
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                            placeholder="Enter title">
+                                    </div>
+                                    <!-- End Title -->
+                                    <!-- Description -->
+                                    <div class="form-group">
+                                        <label for="image">File</label>
+                                        <div class="input-group control-group increment">
+                                            <input type="file" name="image[]" class="form-control" accept="image/*">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-success" type="button"><i
+                                                        class="glyphicon glyphicon-plus"></i>Add</button>
+                                            </div>
+                                        </div>
+                                        <div class="clone hide">
+                                            <div class="control-group input-group" style="margin-top:10px">
+                                                <input type="file" name="image[]" class="form-control" accept="image/*">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-danger" type="button"><i
+                                                            class="glyphicon glyphicon-remove"></i> Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Description -->
                                 </div>
-                                <!-- End Title -->
-                                <!-- Description -->
-                                <div class="form-group">
-                                    <label for="description">Description</label>
-                                    <textarea class="textarea" placeholder="Enter Description" id="description"
-                                        name="description"
-                                        style="width: 100%; height: 400px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                </div>
-                                <!-- End Description -->
                             </div>
                         </div>
-                    </div>
-                    <!-- Submit -->
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary ml-3">Submit</button>
-                    </div>
-                    <!-- End Submit -->
-                </form>
+                        <!-- Submit -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary ml-3">Submit</button>
+                        </div>
+                        <!-- End Submit -->
+                    </form>
+                </div>
+                <!-- /.col-->
             </div>
-            <!-- /.col-->
-        </div>
-        <!-- ./row -->
+            <!-- ./row -->
 </section>
-@endsection
 
 @push('addScript')
-<script>
-    $(function () {
-        // Summernote
-        $('.textarea').summernote()
+<script type="text/javascript">
+    $(document).ready(function() {
+      $(".btn-success").click(function(){
+          var html = $(".clone").html();
+          $(".increment").after(html);
+      });
+      $("body").on("click",".btn-danger",function(){
+          $(this).parents(".control-group").remove();
+      });
     });
 </script>
 @endpush
+@endsection
