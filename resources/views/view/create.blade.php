@@ -49,27 +49,13 @@
                                             placeholder="Enter title">
                                     </div>
                                     <!-- End Title -->
-                                    <!-- Description -->
+                                    <!-- File -->
                                     <div class="form-group">
                                         <label for="image">File</label>
-                                        <div class="input-group control-group increment">
-                                            <input type="file" name="image[]" class="form-control" accept="image/*">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-success" type="button"><i
-                                                        class="glyphicon glyphicon-plus"></i>Add</button>
-                                            </div>
-                                        </div>
-                                        <div class="clone hide">
-                                            <div class="control-group input-group" style="margin-top:10px">
-                                                <input type="file" name="image[]" class="form-control" accept="image/*">
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-danger" type="button"><i
-                                                            class="glyphicon glyphicon-remove"></i> Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <input type="file" name="image[]" class="form-control" accept="image/*"
+                                            multiple>
                                     </div>
-                                    <!-- End Description -->
+                                    <!-- End File -->
                                 </div>
                             </div>
                         </div>
